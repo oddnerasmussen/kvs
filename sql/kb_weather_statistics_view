@@ -1,0 +1,157 @@
+create or replace view kb_weather_statistics_view as
+(select "Maksimumstemperatur" as "Måling", date_format(timestamp,'%d-%m-%Y') as "Dato" , concat(cast(round(measure_value,1) as char charset utf8),' °C') as "Verdi"
+from kb_live_weather_station_datas_year
+where  module_type = 'NAModule1'
+and measure_type = 'temperature'
+and measure_set = 'max'
+and measure_value = (
+		select max(measure_value) from kb_live_weather_station_datas_year
+		where module_type = 'NAModule1'
+		and measure_type = 'temperature'
+		and measure_set = 'max'
+) order by 1 limit 1)
+union
+(select "Minimumstemperatur" as "Måling", date_format(timestamp,'%d-%m-%Y') as "Dato" , concat(cast(round(measure_value,1) as char charset utf8),' °C') as "Verdi"
+from kb_live_weather_station_datas_year
+where  module_type = 'NAModule1'
+and measure_type = 'temperature'
+and measure_set = 'min'
+and measure_value = (
+		select min(measure_value) from kb_live_weather_station_datas_year
+		where module_type = 'NAModule1'
+		and measure_type = 'temperature'
+		and measure_set = 'min'
+) order by 1 limit 1)
+union
+(select "Laveste maksimumstemperatur" as "Måling", date_format(timestamp,'%d-%m-%Y') as "Dato" , concat(cast(round(measure_value,1) as char charset utf8),' °C') as "Verdi"
+from kb_live_weather_station_datas_year
+where  module_type = 'NAModule1'
+and measure_type = 'temperature'
+and measure_set = 'max'
+and measure_value = (
+		select min(measure_value) from kb_live_weather_station_datas_year
+		where module_type = 'NAModule1'
+		and measure_type = 'temperature'
+		and measure_set = 'max'
+) order by 1 limit 1)
+union
+(select "Høyeste minimumstemperatur" as "Måling", date_format(timestamp,'%d-%m-%Y') as "Dato" , concat(cast(round(measure_value,1) as char charset utf8),' °C') as "Verdi"
+from kb_live_weather_station_datas_year
+where  module_type = 'NAModule1'
+and measure_type = 'temperature'
+and measure_set = 'min'
+and measure_value = (
+		select max(measure_value) from kb_live_weather_station_datas_year
+		where module_type = 'NAModule1'
+		and measure_type = 'temperature'
+		and measure_set = 'min'
+) order by 1 limit 1)
+union
+(select "Høyeste duggpunkt" as "Måling", date_format(timestamp,'%d-%m-%Y') as "Dato" , concat(cast(round(measure_value,1) as char charset utf8),' °C') as "Verdi"
+from kb_live_weather_station_datas_year
+where  module_type = 'NAComputed'
+and measure_type = 'dew_point'
+and measure_set = 'max'
+and measure_value = (
+		select max(measure_value) from kb_live_weather_station_datas_year
+		where module_type = 'NAComputed'
+		and measure_type = 'dew_point'
+		and measure_set = 'max'
+) order by 1 limit 1)
+union
+(select "Laveste duggpunkt" as "Måling", date_format(timestamp,'%d-%m-%Y') as "Dato" , concat(cast(round(measure_value,1) as char charset utf8),' °C') as "Verdi"
+from kb_live_weather_station_datas_year
+where  module_type = 'NAComputed'
+and measure_type = 'dew_point'
+and measure_set = 'min'
+and measure_value = (
+		select min(measure_value) from kb_live_weather_station_datas_year
+		where module_type = 'NAComputed'
+		and measure_type = 'dew_point'
+		and measure_set = 'min'
+) order by 1 limit 1)
+union
+(select "Laveste vindfaktor" as "Måling", date_format(timestamp,'%d-%m-%Y') as "Dato" , concat(cast(round(measure_value,1) as char charset utf8),' °C') as "Verdi"
+from kb_live_weather_station_datas_year
+where  module_type = 'NAComputed'
+and measure_type = 'wind_chill'
+and measure_set = 'min'
+and measure_value = (
+		select min(measure_value) from kb_live_weather_station_datas_year
+		where module_type = 'NAComputed'
+		and measure_type = 'wind_chill'
+		and measure_set = 'min'
+) order by 1 limit 1)
+union
+(select "Maksimalt vindkast" as "Måling", date_format(timestamp,'%d-%m-%Y') as "Dato" , concat(cast(round(measure_value/3.6,1) as char charset utf8),' m/s')  as "Verdi"
+from kb_live_weather_station_datas_year
+where  module_type = 'NAModule2'
+and measure_type = 'guststrength'
+and measure_set = 'max'
+and measure_value = (
+		select max(measure_value) from kb_live_weather_station_datas_year
+		where module_type = 'NAModule2'
+		and measure_type = 'guststrength'
+		and measure_set = 'max'
+) order by 1 limit 1)
+union
+(select "Maksimalt vindhastiget (snitt 10 min.)" as "Måling", date_format(timestamp,'%d-%m-%Y') as "Dato" , concat(cast(round(measure_value/3.6,1) as char charset utf8),' m/s')  as "Verdi"
+from kb_live_weather_station_datas_year
+where  module_type = 'NAModule2'
+and measure_type = 'windstrength'
+and measure_set = 'max'
+and measure_value = (
+		select max(measure_value) from kb_live_weather_station_datas_year
+		where module_type = 'NAModule2'
+		and measure_type = 'windstrength'
+		and measure_set = 'max'
+) order by 1 limit 1)
+union
+(select "Høyeste trykk" as "Måling", date_format(timestamp,'%d-%m-%Y') as "Dato" , concat(cast(round(measure_value,1) as char charset utf8),' hPa')  as "Verdi"
+from kb_live_weather_station_datas_year
+where  module_type = 'NAMain'
+and measure_type = 'pressure'
+and measure_set = 'max'
+and measure_value = (
+		select max(measure_value) from kb_live_weather_station_datas_year
+		where module_type = 'NAMain'
+		and measure_type = 'pressure'
+		and measure_set = 'max'
+) order by 1 limit 1)
+union
+(select "Laveste trykk" as "Måling", date_format(timestamp,'%d-%m-%Y') as "Dato" , concat(cast(round(measure_value,1) as char charset utf8),' hPa')  as "Verdi"
+from kb_live_weather_station_datas_year
+where  module_type = 'NAMain'
+and measure_type = 'pressure'
+and measure_set = 'min'
+and measure_value = (
+		select min(measure_value) from kb_live_weather_station_datas_year
+		where module_type = 'NAMain'
+		and measure_type = 'pressure'
+		and measure_set = 'min'
+) order by 1 limit 1)
+union
+(select "Mest regn på en dag" as "Måling", date_format(timestamp,'%d-%m-%Y') as "Dato" , concat(cast(round(measure_value,1) as char charset utf8),' mm')  as "Verdi"
+from kb_live_weather_station_datas_year
+where  module_type = 'NAModule3'
+and measure_type = 'rain_day_aggregated'
+and measure_set = 'agg'
+and measure_value = (
+		select max(measure_value) from kb_live_weather_station_datas_year
+		where module_type = 'NAModule3'
+		and measure_type = 'rain_day_aggregated'
+		and measure_set = 'agg'
+) order by 1 limit 1)
+union
+(select "Laveste fuktighet" as "Måling", date_format(timestamp,'%d-%m-%Y') as "Dato" , concat(cast(round(measure_value,1) as char charset utf8),' %')  as "Verdi"
+from kb_live_weather_station_datas_year
+where  module_type = 'NAModule1'
+and measure_type = 'humidity'
+and measure_set = 'min'
+and measure_value = (
+		select min(measure_value) from kb_live_weather_station_datas_year
+		where module_type = 'NAModule1'
+		and measure_type = 'humidity'
+		and measure_set = 'min'
+) order by 1 limit 1)
+;
