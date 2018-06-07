@@ -1,0 +1,11 @@
+create or replace view kb_weather_total_rain_view as
+select 'Totalt Regn/År' "Totalt Regn/År",
+substr(hist.timestamp,1,4) AS "År",
+concat(cast(round(sum(hist.measure_value),1) as char charset utf8),' mm') AS "Verdi"
+from kb_live_weather_station_datas_year hist
+where ((hist.device_id = '70:ee:50:2c:a8:96')
+and (hist.measure_type = 'rain_day_aggregated')
+and (hist.measure_set = 'agg') 
+and (hist.timestamp > '2012-01-01'))
+group by 1,2
+order by 1,2 desc;
